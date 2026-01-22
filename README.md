@@ -1,94 +1,76 @@
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Status](https://img.shields.io/badge/status-%20finalizado-yellow.svg)
-![Shellably](https://img.shields.io/badge/feito%20com-%F0%9F%A4%96%20x%20%F0%9F%92%BB-critical)
+# Script Auto - Script de Automação para Instalação de Pacotes
 
-[![Último commit](https://img.shields.io/github/last-commit/InacioPS/global-install)](https://github.com/InacioPS/global-install/commits/main)
-[![Releases](https://img.shields.io/github/v/release/InacioPS/global-install?label=release)](https://github.com/InacioPS/InacioPS/releases)
-[![Stars](https://img.shields.io/github/stars/InacioPS/global-install?style=social)](https://github.com/InacioPS/global-install/stargazers)
-# Script Auto - Automation Script for Package Installation
+## Visão Geral do Projeto
 
-## Project Overview
+Este é um script de automação em bash (`install.sh`) projetado para simplificar a instalação de pacotes em diferentes distribuições Linux. O script suporta as principais famílias de distribuições, incluindo sistemas baseados em Ubuntu/Debian, Arch Linux e derivados, e inclui tratamento especial para pacotes do AUR (Arquivo de Usuário do Arch - Arch User Repository).
 
-This is a bash automation script (`install.sh`) designed to simplify package installation across different Linux distributions. The script supports major distribution families including Ubuntu/Debian-based systems, Arch Linux and derivatives, and includes special handling for AUR (Arch User Repository) packages.
+### Principais Recursos
 
-### Key Features
+- **Suporte a múltiplas distribuições**: Detecta automaticamente a distribuição Linux e utiliza os gerenciadores de pacotes apropriados (apt para Ubuntu/Debian, pacman para sistemas baseados em Arch)
+- **Integração com AUR**: Tratamento especial para usuários do Arch Linux para instalar pacotes do AUR usando `yay`
+- **Listas abrangentes de pacotes**: Listas predefinidas de pacotes comumente usados em categorias (desenvolvimento, multimídia, utilitários, etc.)
+- **Suporte a AppImage**: Integração com AppImageSup para gerenciar aplicações AppImage
+- **Tratamento de erros**: Lida graciosamente com pacotes ausentes e falhas de instalação
+- **Impõe privilégios de root**: Garante que o script seja executado com as permissões apropriadas
 
-- **Multi-distribution support**: Automatically detects the Linux distribution and uses appropriate package managers (apt for Ubuntu/Debian, pacman for Arch-based systems)
-- **AUR integration**: Special handling for Arch Linux users to install packages from the AUR using `yay`
-- **Comprehensive package lists**: Predefined lists of commonly used packages across categories (development, multimedia, utilities, etc.)
-- **AppImage support**: Integration with AppImageSup for managing AppImage applications
-- **Error handling**: Graceful handling of missing packages and installation failures
-- **Root privilege enforcement**: Ensures the script runs with appropriate permissions
+### Arquitetura
 
-### Architecture
+O script segue uma abordagem modular com:
+- Listas principais de pacotes para repositórios oficiais
+- Listas separadas para pacotes do AUR (sistemas baseados em Arch)
+- Lógica de detecção de distribuição
+- Funções específicas de instalação por plataforma
+- Mecanismos de relatório de erro
 
-The script follows a modular approach with:
+## Compilação e Execução
 
-- Main package lists for official repositories
-- Separate lists for AUR packages (Arch-based systems)
-- Distribution detection logic
-- Platform-specific installation functions
-- Error reporting mechanisms
+### Pré-requisitos
+- Privilégios de root (o script deve ser executado com `sudo`)
+- Conexão à internet para download dos pacotes
 
-## Building and Running
-
-### Prerequisites
-
-- Root privileges (script must be run with `sudo`)
-- Internet connection for package downloads
-
-### Usage
-
+### Uso
 ```bash
 sudo ./install.sh
 ```
 
-### Configuration
+### Configuração
+O script contém três arrays principais de pacotes que podem ser personalizados:
+- `PACOTES`: Pacotes de repositório oficial (comuns a todas as distros)
+- `AUR_PACOTES`: Pacotes do AUR (para sistemas baseados em Arch)
+- `APPIMAGE`: Aplicações AppImage
 
-The script contains three main package arrays that can be customized:
+Para personalizar a instalação, edite esses arrays no script antes de executar.
 
-- `PACOTES`: Official repository packages (common to all distros)
-- `AUR_PACOTES`: AUR packages (for Arch-based systems)
-- `APPIMAGE`: AppImage applications
+### Distribuições Suportadas
+- Distribuições Ubuntu e baseadas no Ubuntu
+- Distribuições Debian e baseadas no Debian
+- Arch Linux e derivados (CachyOS, EndeavourOS, etc.)
 
-To customize the installation, edit these arrays in the script before running.
+## Convenções de Desenvolvimento
 
-### Supported Distributions
+### Estilo de Codificação
+- Escrito em bash seguindo conformidade POSIX sempre que possível
+- Usa `set -e` para tratamento de erros
+- Inclui comentários detalhados em português (brasileiro)
+- Design modular de funções para diferentes métodos de instalação
 
-- Ubuntu and Ubuntu-based distributions
-- Debian and Debian-based distributions
-- Arch Linux and derivatives (CachyOS, EndeavourOS, etc.)
+### Práticas de Teste
+- Validação de detecção de distribuição
+- Verificação de existência de pacotes antes de tentativas de instalação
+- Verificação de códigos de erro para instalações do AUR
 
-## Development Conventions
+### Diretrizes de Contribuição
+- Adicione novos pacotes ao array apropriado (`PACOTES`, `AUR_PACOTES` ou `APPIMAGE`)
+- Mantenha ordenação alfabética ou lógica dentro dos arrays
+- Garanta que os pacotes estejam disponíveis nos repositórios-alvo
+- Teste em múltiplas famílias de distribuição sempre que possível
 
-### Coding Style
+## Estrutura do Projeto
+- `install.sh`: Script principal de automação
+- `README.md`: Documentação abrangente do projeto (este arquivo)
 
-- Written in bash following POSIX compliance where possible
-- Uses `set -e` for error handling
-- Includes detailed comments in Portuguese (Brazilian)
-- Modular function design for different installation methods
-
-### Testing Practices
-
-- Distribution detection validation
-- Package existence checks before installation attempts
-- Error code checking for AUR installations
-
-### Contribution Guidelines
-
-- Add new packages to the appropriate array (`PACOTES`, `AUR_PACOTES`, or `APPIMAGE`)
-- Maintain alphabetical or logical ordering within arrays
-- Ensure packages are available in the target repositories
-- Test on multiple distribution families when possible
-
-## Project Structure
-
-- `install.sh`: Main automation script
-- `README.md`: Comprehensive project documentation (this file)
-
-## Additional Notes
-
-- The script automatically installs `yay` if not present on Arch-based systems
-- Package lists can be modified to suit individual needs
-- The script provides detailed installation reports, including skipped packages
-- Includes automatic setup of Flathub repository for Flatpak applications
+## Notas Adicionais
+- O script instala automaticamente o `yay` se ainda não estiver presente em sistemas baseados em Arch
+- As listas de pacotes podem ser modificadas para atender às necessidades individuais
+- O script fornece relatórios detalhados de instalação, incluindo pacotes ignorados
+- Inclui configuração automática do repositório Flathub para aplicações Flatpak
